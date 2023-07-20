@@ -7,7 +7,7 @@ const employeeRoutes = require('./routes/empolyee.route');
 const leaveRoutes = require('./routes/leaverequest.route');
 const leaveBalanceRoutes = require('./routes/leavebalances.route');
 // Connecting mongoDB Database
-mongoose.connect('mongodb://127.0.0.1:27017/App')
+mongoose.connect('mongodb+srv://admin:admin@cluster0.dtdjnrs.mongodb.net/App?retryWrites=true&w=majority')
   .then((x) => {
     console.log(`Connected to Mongo! Database name: "${x.connections[0].name}"`)
   })

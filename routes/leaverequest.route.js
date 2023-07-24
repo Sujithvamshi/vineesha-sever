@@ -1,11 +1,11 @@
-const { Router } = require('express');
-const router = Router();
+const express = require('express');
+const router = express.Router();
 const LeaveRequest = require('../models/LeaveRequest');
 
 // GET all leave requests
 router.get('/', async (req, res) => {
   try {
-    const leaveRequests = await find().populate('employee_id', 'name department');
+    const leaveRequests = await LeaveRequest.find().populate('employee_id', 'name department');
     res.json(leaveRequests);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -16,6 +16,19 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
   try {
     const leaveRequest = await LeaveRequest.findById(req.params.id).populate('employee_id', 'name department');
+    if (!leaveRequest) {
+      return res.status(404).json({ message: 'Leave request not found' });
+    }
+    res.json(leaveRequest);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.post('/getleaves', async (req, res) => {
+  try {
+    const { employee_id,status } = req.body;
+    const leaveRequest = await LeaveRequest.find({ employee_id,status })
     if (!leaveRequest) {
       return res.status(404).json({ message: 'Leave request not found' });
     }
@@ -36,6 +49,7 @@ router.post('/', async (req, res) => {
       end_date,
       leave_type,
       reason,
+      status: 'pending', // Set the initial status as 'Pending'
     });
 
     await leaveRequest.save();

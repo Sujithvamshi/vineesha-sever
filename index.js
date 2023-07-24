@@ -22,7 +22,7 @@ app.use(urlencoded({
 app.use(cors());
 app.use('/employees', employeeRoutes);
 app.use('/leave', leaveRoutes);
-app.use('/leave-balance', leaveBalanceRoutes);
+app.use('/leavebalance', leaveBalanceRoutes);
 // PORT
 const port = process.env.PORT || 4000;
 const server = app.listen(port, () => {

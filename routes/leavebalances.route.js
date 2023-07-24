@@ -15,7 +15,7 @@ router.get('/', async (req, res) => {
 // GET leave balance for a specific employee by ID
 router.get('/:employee_id', async (req, res) => {
   try {
-    const leaveBalance = await LeaveBalance.findOne({ employee_id: req.params.employee_id });
+    const leaveBalance = await LeaveBalance.find({ employee_id: req.params.employee_id });
     if (!leaveBalance) {
       return res.status(404).json({ message: 'Leave balance not found for the employee' });
     }

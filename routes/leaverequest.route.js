@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const LeaveRequest = require('../models/LeaveRequest');
-
+const LeaveBalance = require('../models/LeaveBalances');
 // GET all leave requests
 router.get('/', async (req, res) => {
   try {
@@ -73,7 +73,14 @@ router.patch('/:id', async (req, res) => {
     // Update leave request properties
     leaveRequest.status = status;
     leaveRequest.manager_comment = manager_comment;
-
+    if(status=="approved"){
+      let leaveBalance = await LeaveBalance.findOne({
+        employee_id: leaveRequest.employee_id,
+        leave_type: leaveRequest.leave_type,
+      });
+      leaveBalance.balance -= 1
+      await leaveBalance.save()
+    }
     // Save the updated leave request
     await leaveRequest.save();
     res.json(leaveRequest);
